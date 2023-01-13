@@ -136,7 +136,7 @@ Apache Spark has following features.
 ### 2.1 Install Java 8 or Later
 
 - Spark is written in Scala, so the runtime env is JVM
-- Download and install Java version from [Oracle](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) or [OpenJDK](OpenJDK) and install it on system.
+- Download and install Java version from [Oracle](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) or [OpenJDK](https://www.openlogic.com/openjdk-downloads) and install it on system.
 - After install, set `JAVA_HOME` environment variable. Example:
   
     ```console
@@ -218,9 +218,8 @@ Apache Spark has following features.
 
 - Target: aggregate CNCF data to get a statistics about the organization's product, ranking, contribute,... on Cloud 
   Technologies.
-- Approach method: using Spark-shell to interactive result.
-- Input data: `interactive-landscape.csv` (Get from `spark-guideline` source-code or download from 
-[this link](https://landscape.cncf.io/?zoom=150))
+- Implementation's method: using Spark-shell to interactive result.
+- Input data: [interactive-landscape.csv](./interactive-landscape.csv)(Get from this `spark-guideline` folder).
   - In this example's code, place the file to target directory: `C:/interactive-landscape.csv`
 - Spark-shell code:
   - Change the input/output directory file path in the code if there is difference:
@@ -265,3 +264,6 @@ Apache Spark has following features.
   ```
 
 - Check output: `C:/cncf-output.csv`
+- To run this example with Spark-submit:
+  - Build & package the source-code folder `cncf-analysis` as sbt project
+  - Run submit command: syntax format in **3.1**

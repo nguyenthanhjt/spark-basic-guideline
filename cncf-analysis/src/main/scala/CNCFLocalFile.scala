@@ -1,4 +1,4 @@
-package com.trinity
+package com.spark
 
 import org.apache.spark.sql.functions.{col, countDistinct, desc, sum}
 import org.apache.spark.sql.{SparkSession, functions}
@@ -6,6 +6,9 @@ import org.apache.spark.sql.{SparkSession, functions}
 import java.io.File
 import java.nio.file.{Files, Paths}
 
+/**
+ * An implementation for CNCF Analysis with file on local hard-drive
+ */
 object CNCFLocalFile {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder().appName("CNCF Application").getOrCreate()
@@ -34,37 +37,37 @@ object CNCFLocalFile {
 
     val finalDf = aggDf.orderBy(desc("Total_Products")).selectExpr(schema: _*)
 
-    var outputFolder = s"${folderPath}/result/"
+    var outputFolder = s"$folderPath/result/"
     finalDf
       .repartition(1)
       .write
       .mode("overwrite")
       .option("delimiter", "\t")
-      .option("header", true)
+      .option("header", value = true)
       .csv(outputFolder)
 
 
-    val fileList = getListOfFiles(outputFolder, "part*.csv")
+    val fileList = getListOfFiles(outputFolder)
 
-    val outputFileName = getRawFilePath(outputFolder, "part")
+    val outputFileName = getRawFilePath(outputFolder)
 
-    println(s"Raw output path:${outputFileName}")
+    println(s"Raw output path:$outputFileName")
     renameFile(outputFileName, outputFolder + "cncf-output.csv")
-    println(s"Renamed file name:${outputFileName}")
+    println(s"Renamed file name:$outputFileName")
 
   }
 
-  private def getListOfFiles(dir: String, pattern: String): List[String] = {
+  private def getListOfFiles(dir: String): List[String] = {
     val file = new File(dir)
     file.listFiles.filter(_.isFile)
-      .filter(_.getName.contains(pattern))
+      .filter(_.getName.contains("part*.csv"))
       .map(_.getPath).toList
   }
 
-  private def getRawFilePath(dir: String, pattern: String): String = {
+  private def getRawFilePath(dir: String): String = {
     val file = new File(dir)
     file.listFiles.filter(_.isFile)
-      .filter(_.getName.startsWith(pattern))
+      .filter(_.getName.startsWith("part"))
       .map(_.getPath).toList.head
   }
 

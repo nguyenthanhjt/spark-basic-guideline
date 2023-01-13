@@ -1,10 +1,13 @@
-package com.trinity
+package com.spark
 
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 import org.apache.spark.sql.functions._
 
+/**
+ * An implementation for CNCF Analysis with file on HDFS
+ */
 object CNCFAnalysis {
   def main(args: Array[String]): Unit = {
     var conf = new SparkConf().setAppName("Trinity-Demo").setMaster("local[*]")
@@ -14,7 +17,7 @@ object CNCFAnalysis {
 
     val inputPath = "/tmp"
     val outputDir = args(0)
-    val filePath = s"${inputPath}/interactive-landscape.csv*"
+    val filePath = s"$inputPath/interactive-landscape.csv*"
 
     val rawDf = spark.read.option("delimiter", ",").option("header", value = true).csv(filePath)
 
@@ -37,8 +40,8 @@ object CNCFAnalysis {
       .write
       .mode("overwrite")
       .option("delimiter", "\t")
-      .option("header", true)
-      .csv(s"${inputPath}/result/")
+      .option("header", value = true)
+      .csv(s"$inputPath/result/")
 
     val filePart = fs
       .globStatus(new Path(s"$inputPath/result/part*"))(0).getPath.getName

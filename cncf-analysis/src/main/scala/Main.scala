@@ -1,4 +1,4 @@
-package com.trinity
+package com.spark
 
 object Main {
   def main(args: Array[String]): Unit = {
